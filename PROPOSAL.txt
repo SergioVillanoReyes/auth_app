@@ -1,0 +1,3 @@
+This project is a minimal React Native template with an initial home screen,
+shared theme tokens, reusable HTTP utilities, and native Android/iOS modules.
+Feature-specific domain, data, and presentation files can be added as needed.
