@@ -10,7 +10,7 @@ const createResponse = (body: unknown): Response =>
     status: 200,
     statusText: 'OK',
     json: jest.fn().mockResolvedValue(body),
-  } as Response);
+  } as unknown as Response)
 
 const product = {
   id: 1,

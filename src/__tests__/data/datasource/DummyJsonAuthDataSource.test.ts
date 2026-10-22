@@ -18,7 +18,7 @@ const createResponse = (body: unknown): Response => ({
   blob: jest.fn(),
   formData: jest.fn(),
   text: jest.fn(),
-});
+}) as unknown as Response;
 
 describe('DummyJsonAuthDataSource', () => {
   let httpClient: HttpClient;
