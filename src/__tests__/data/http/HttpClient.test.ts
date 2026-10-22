@@ -1,10 +1,5 @@
 import { HttpClient } from '../../../data/http/HttpClient';
 import { HttpError } from '../../../data/http/HttpError';
-import { INetworkChecker } from '../../../data/http/INetworkChecker';
-
-const mockNetworkChecker: jest.Mocked<INetworkChecker> = {
-  checkConnectivity: jest.fn(),
-};
 
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
@@ -14,8 +9,7 @@ describe('HttpClient', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockNetworkChecker.checkConnectivity.mockResolvedValue();
-    client = new HttpClient('https://example.com/api/v2', mockNetworkChecker);
+    client = new HttpClient('https://example.com/api/v2');
   });
 
   it('should return parsed JSON on successful response', async () => {
@@ -42,20 +36,53 @@ describe('HttpClient', () => {
     await expect(client.get('/items')).rejects.toMatchObject({ status: 0 });
   });
 
-  it('should call networkChecker before fetch', async () => {
+  it('should use the requested endpoint to determine connectivity', async () => {
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue({}) });
 
     await client.get('/items');
 
-    expect(mockNetworkChecker.checkConnectivity).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
-  it('should propagate HttpError from networkChecker', async () => {
-    mockNetworkChecker.checkConnectivity.mockRejectedValue(new HttpError(0, 'No internet connection'));
-
-    await expect(client.get('/items')).rejects.toMatchObject({
-      status: 0,
-      message: 'No internet connection',
+  it('should post JSON with content type and custom headers', async () => {
+    const body = { username: 'emilys', password: 'password' };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ accessToken: 'token' }),
     });
+
+    await expect(
+      client.post('/auth/login', body, { 'X-Request-Id': 'test' })
+    ).resolves.toEqual({ accessToken: 'token' });
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://example.com/api/v2/auth/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Request-Id': 'test',
+        },
+        body: JSON.stringify(body),
+      }
+    );
   });
+
+  it('should pass custom headers to GET requests', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ id: 1 }),
+    });
+
+    await client.get('/auth/me', { Authorization: 'Bearer token' });
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://example.com/api/v2/auth/me',
+      {
+        method: 'GET',
+        headers: { Authorization: 'Bearer token' },
+      }
+    );
+  });
+
 });

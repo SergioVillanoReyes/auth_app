@@ -1,12 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { AuthProvider } from './src/presentation/context/AuthContext';
 import { AppNavigator } from './src/presentation/navigation/AppNavigator';
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <AppNavigator />
+        <AuthProvider>
+          <AppNavigator />
+        </AuthProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );

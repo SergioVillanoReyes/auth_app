@@ -30,5 +30,14 @@ class StorageModule: NSObject {
   ) {
       resolve(UserDefaults.standard.string(forKey: key))
   }
-  
+
+  @objc
+  func removeItem(
+    _ key: String,
+    resolve: RCTPromiseResolveBlock,
+    reject: RCTPromiseRejectBlock
+  ) {
+      UserDefaults.standard.removeObject(forKey: key)
+      resolve(nil)
+  }
 }

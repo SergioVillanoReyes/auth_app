@@ -46,4 +46,17 @@ class StorageModule(reactContext: ReactApplicationContext) :
       promise.reject("GET_ERROR", e.message)
     }
   }
+
+  @ReactMethod
+  fun removeItem(key: String, promise: Promise) {
+    try {
+      val removed = prefs.edit().remove(key).commit()
+      if (!removed) {
+        throw IllegalStateException("Unable to remove stored value")
+      }
+      promise.resolve(null)
+    } catch (e: Exception) {
+      promise.reject("REMOVE_ERROR", e.message, e)
+    }
+  }
 }

@@ -1,16 +1,43 @@
 import { HttpError } from './HttpError';
-import { INetworkChecker } from './INetworkChecker';
 
 export class HttpClient {
-  constructor(
-    private baseUrl: string,
-    private networkChecker: INetworkChecker
-  ) {}
+  constructor(private baseUrl: string) {}
 
-  async get<T>(path: string): Promise<T> {
-    await this.networkChecker.checkConnectivity()
+  async get<T>(path: string, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>(path, {
+      method: 'GET',
+      headers,
+    });
+  }
+
+  async post<T>(
+    path: string,
+    body: unknown,
+    headers?: Record<string, string>
+  ): Promise<T> {
+    return this.request<T>(path, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      body: JSON.stringify(body),
+    });
+  }
+
+  private async request<T>(
+    path: string,
+    options: {
+      method: 'GET' | 'POST';
+      headers?: Record<string, string>;
+      body?: string;
+    }
+  ): Promise<T> {
     try {
-      const resp = await fetch(`${this.baseUrl}${path}`)
+      const hasOptions = options.headers !== undefined || options.body !== undefined;
+      const resp = hasOptions
+        ? await fetch(`${this.baseUrl}${path}`, options)
+        : await fetch(`${this.baseUrl}${path}`);
       if (!resp.ok) throw new HttpError(resp.status, resp.statusText)
       return await resp.json()
     } catch (err) {
