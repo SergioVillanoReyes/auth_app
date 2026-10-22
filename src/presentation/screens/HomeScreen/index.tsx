@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppButton } from '../../components/AppButton';
 import { useAuth } from '../../context/AuthContext';
+import { ProductsCatalogScreen } from '../ProductsCatalogScreen';
 
 export const HomeScreen = (): React.JSX.Element => {
   const { state, logout } = useAuth();
@@ -19,6 +20,9 @@ export const HomeScreen = (): React.JSX.Element => {
           {state.logoutError}
         </Text>
       ) : null}
+      <View style={styles.catalog}>
+        <ProductsCatalogScreen />
+      </View>
       <AppButton
         text={state.isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
         onPress={() => {
@@ -33,24 +37,29 @@ export const HomeScreen = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     backgroundColor: '#ffffff',
     flex: 1,
-    justifyContent: 'center',
     padding: 24,
   },
   title: {
+    alignSelf: 'center',
     color: '#1f2937',
     fontSize: 32,
     fontWeight: '700',
   },
   subtitle: {
+    alignSelf: 'center',
     color: '#6b7280',
     fontSize: 16,
     marginTop: 8,
   },
   error: {
     color: '#b91c1c',
+    textAlign: 'center',
     marginVertical: 16,
+  },
+  catalog: {
+    flex: 1,
+    marginTop: 24,
   },
 });
