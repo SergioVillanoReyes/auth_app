@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { colors, glass, radius, spacing } from '../../../core/theme';
 import { AppButton } from '../../components/AppButton';
 import { useProductsCatalog } from '../../hooks/useProductsCatalog';
 
@@ -95,7 +96,9 @@ export const ProductsCatalogScreen = (): React.JSX.Element => {
         onChangeText={setSearchInput}
         onSubmitEditing={submitSearch}
         placeholder="Buscar por nombre"
+        placeholderTextColor={colors.textSecondary}
         returnKeyType="search"
+        selectionColor={colors.primary}
         style={styles.searchInput}
         value={searchInput}
       />
@@ -157,29 +160,42 @@ export const ProductsCatalogScreen = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   content: {
-    paddingBottom: 24,
+    paddingBottom: spacing.lg,
   },
   heading: {
-    color: '#1f2937',
+    color: colors.textPrimary,
     fontSize: 22,
     fontWeight: '700',
     marginBottom: 16,
   },
   searchInput: {
-    borderColor: '#9ca3af',
-    borderRadius: 8,
+    backgroundColor: glass.surface,
+    borderColor: glass.border,
+    borderRadius: radius.md,
     borderWidth: 1,
     fontSize: 16,
     marginBottom: 12,
     padding: 12,
+    color: colors.textPrimary,
   },
   message: {
-    color: '#6b7280',
+    backgroundColor: glass.surface,
+    borderColor: glass.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    color: colors.textSecondary,
     fontSize: 16,
     marginVertical: 16,
+    overflow: 'hidden',
+    padding: spacing.md,
   },
   errorContainer: {
+    backgroundColor: glass.surfaceError,
+    borderColor: glass.errorBorder,
+    borderRadius: radius.md,
+    borderWidth: 1,
     marginVertical: 16,
+    padding: spacing.md,
   },
   error: {
     color: '#b91c1c',
@@ -187,10 +203,18 @@ const styles = StyleSheet.create({
   },
   productCard: {
     alignItems: 'center',
-    borderBottomColor: '#d6dce5',
-    borderBottomWidth: 1,
+    backgroundColor: glass.surface,
+    borderColor: glass.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
     flexDirection: 'row',
-    paddingVertical: 12,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+    shadowColor: glass.shadow,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 3,
   },
   thumbnail: {
     height: 72,
@@ -201,22 +225,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   productTitle: {
-    color: '#1f2937',
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '600',
   },
   productMeta: {
-    color: '#6b7280',
+    color: colors.textSecondary,
     marginTop: 4,
   },
   price: {
-    color: '#1f2937',
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '700',
     marginTop: 6,
   },
   detail: {
+    backgroundColor: glass.surface,
+    borderColor: glass.border,
+    borderRadius: radius.xl,
+    borderWidth: 1,
     marginTop: 20,
+    padding: spacing.lg,
+    shadowColor: glass.shadow,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 18,
+    elevation: 5,
   },
   detailImage: {
     alignSelf: 'center',
@@ -225,7 +259,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   description: {
-    color: '#1f2937',
+    color: colors.textPrimary,
     fontSize: 16,
     lineHeight: 24,
     marginTop: 16,

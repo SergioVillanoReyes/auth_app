@@ -7,3 +7,5 @@ export * from './typography';
 export * from './radius';
 
 export * from './dimensions';
+
+export * from './glass';
